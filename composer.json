@@ -6,7 +6,7 @@
         "php",
         "antcloud"
     ],
-    "description": "蚂蚁金福金融API平台网关第三方PHP SDK",
+    "description": "蚂蚁金服金融API平台网关第三方PHP SDK",
     "autoload": {
         "psr-4": {
             "AntCloudSDKCore\\": "src/"
