@@ -28,12 +28,14 @@ class AntCloudClient
     public $timeout;
     public $userAgent;
     public $debugMode;
+    public $requester;
 
     /**
      * AntCloudClient constructor.
-     * @param $endpoint string 访问地址
-     * @param $accessKey string
-     * @param $accessSecret string
+     * @param string $endpoint  访问地址
+     * @param string $accessKey
+     * @param string $accessSecret
+     * @param callbale $requester 请求器
      * @param bool $checkSign 是否需要校验签名
      * @param null $timeout 超时时间
      * @param null $userAgent
@@ -42,6 +44,7 @@ class AntCloudClient
     public function __construct($endpoint,
                                 $accessKey,
                                 $accessSecret,
+                                $requester = null,
                                 $checkSign = true,
                                 $timeout = null,
                                 $userAgent = null,
@@ -50,6 +53,7 @@ class AntCloudClient
         $this->endpoint = $endpoint;
         $this->accessKey = $accessKey;
         $this->accessSecret = $accessSecret;
+        $this->requester = $requester;
         $this->checkSign = $checkSign;
         $this->timeout = $timeout;
         $this->userAgent = $userAgent;
@@ -80,7 +84,7 @@ class AntCloudClient
         $httpRequest = new HttpRequest($this->endpoint, $content);
 
         // 获取请求响应response
-        $httpResponse = WebUtil::getResponse($httpRequest);
+        $httpResponse = $this->requester && \is_callable($this->requester) ? \call_user_func_array($this->requester, [$httpRequest]) : WebUtil::getResponse($httpRequest);
 
         // 解析response
         if ($returnRawResp) {
